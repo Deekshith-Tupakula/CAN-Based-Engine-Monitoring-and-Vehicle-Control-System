@@ -1,0 +1,21 @@
+# Keil uVision build outputs and intermediate files
+*.o
+*.crf
+*.d
+*.axf
+*.lnp
+*.map
+*.htm
+*.build_log.htm
+*.dep
+
+# User-specific Keil configuration files
+*.uvgui.*
+*.uvgui
+
+# OS and temporary files
+.DS_Store
+Thumbs.db
+*.bak
+*.orig
+*.lst

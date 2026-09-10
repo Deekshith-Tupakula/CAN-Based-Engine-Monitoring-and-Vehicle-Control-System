@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>CAN-Based Engine Monitoring and Vehicle Control System Documentation</title>
+<style>
+    @page {
+        size: A4;
+        margin: 18mm 15mm 18mm 15mm;
+        @bottom-right {
+            content: counter(page);
+        }
+    }
+    body {
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+        color: #1a202c;
+        line-height: 1.5;
+        font-size: 13px;
+        background: #fff;
+        margin: 0;
+        padding: 0;
+    }
+    .cover-page {
+        page-break-after: always;
+        text-align: center;
+        padding-top: 60px;
+    }
+    .cover-badge {
+        display: inline-block;
+        background: #ebf8ff;
+        color: #2b6cb0;
+        font-weight: 700;
+        font-size: 12px;
+        padding: 6px 16px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+        border: 1px solid #bee3f8;
+    }
+    .cover-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #1a365d;
+        margin: 0 0 12px 0;
+        line-height: 1.25;
+    }
+    .cover-subtitle {
+        font-size: 16px;
+        color: #4a5568;
+        max-width: 600px;
+        margin: 0 auto 40px auto;
+    }
+    .cover-meta-box {
+        background: #f7fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 20px;
+        max-width: 450px;
+        margin: 0 auto;
+        text-align: left;
+    }
+    .meta-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        font-size: 12px;
+    }
+    .meta-row:last-child { margin-bottom: 0; }
+    .meta-label { font-weight: 600; color: #718096; }
+    .meta-val { font-weight: 700; color: #2d3748; }
+
+    h1 {
+        color: #1a365d;
+        font-size: 18px;
+        border-bottom: 2px solid #3182ce;
+        padding-bottom: 6px;
+        margin-top: 30px;
+        margin-bottom: 12px;
+        page-break-after: avoid;
+    }
+    h2 {
+        color: #2b6cb0;
+        font-size: 15px;
+        margin-top: 20px;
+        margin-bottom: 8px;
+        page-break-after: avoid;
+    }
+    h3 {
+        color: #2d3748;
+        font-size: 13px;
+        margin-top: 14px;
+        margin-bottom: 6px;
+        page-break-after: avoid;
+    }
+    p { margin: 0 0 10px 0; text-align: justify; }
+
+    .page-break { page-break-after: always; }
+
+    /* Tables */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 12px 0 18px 0;
+        font-size: 11.5px;
+    }
+    th, td {
+        border: 1px solid #cbd5e0;
+        padding: 6px 10px;
+        text-align: left;
+    }
+    th {
+        background: #edf2f7;
+        color: #2d3748;
+        font-weight: 700;
+    }
+    tr:nth-child(even) td { background: #f7fafc; }
+
+    /* LCD Screen Display Mockup Box */
+    .lcd-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin: 14px 0;
+        page-break-inside: avoid;
+    }
+    .lcd-card {
+        background: #0f172a;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 10px 12px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+    }
+    .lcd-card.alert {
+        border-color: #ef4444;
+        background: #1e1014;
+    }
+    .lcd-card.warn {
+        border-color: #f59e0b;
+        background: #1c1917;
+    }
+    .lcd-header {
+        font-size: 11px;
+        font-weight: 700;
+        color: #94a3b8;
+        margin-bottom: 6px;
+        border-bottom: 1px solid #334155;
+        padding-bottom: 4px;
+    }
+    .lcd-screen {
+        background: #0369a1;
+        color: #f0f9ff;
+        font-family: 'Consolas', 'Courier New', Courier, monospace;
+        font-size: 11px;
+        line-height: 1.4;
+        padding: 8px 10px;
+        border-radius: 4px;
+        letter-spacing: 0.5px;
+        border: 1px solid #0284c7;
+        white-space: pre;
+    }
+    .lcd-screen.green {
+        background: #14532d;
+        color: #dcfce7;
+        border-color: #16a34a;
+    }
+    .lcd-screen.red {
+        background: #7f1d1d;
+        color: #fee2e2;
+        border-color: #dc2626;
+    }
+
+    /* Diagram Boxes */
+    .diagram-box {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 14px;
+        margin: 14px 0;
+        text-align: center;
+        page-break-inside: avoid;
+    }
+</style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-page">
+    <div class="cover-badge">Automotive Embedded Systems Project Documentation</div>
+    <div class="cover-title">CAN-Based Engine Monitoring &<br>Vehicle Control System</div>
+    <div class="cover-subtitle">Distributed Multi-Node Automotive Network with Dynamic Fault Detection, LPC2129 ARM7 Microcontrollers, and CAN 2.0B Protocol</div>
+    
+    <div class="cover-meta-box">
+        <div class="meta-row">
+            <span class="meta-label">Architecture:</span>
+            <span class="meta-val">3-Node Distributed CAN Bus (250 kbps)</span>
+        </div>
+        <div class="meta-row">
+            <span class="meta-label">Fault Detection:</span>
+            <span class="meta-val">Software Watchdog with Node Error Screens</span>
+        </div>
+        <div class="meta-row">
+            <span class="meta-label">Microcontroller:</span>
+            <span class="meta-val">NXP LPC2129 (ARM7TDMI-S @ 60MHz)</span>
+        </div>
+        <div class="meta-row">
+            <span class="meta-label">Display Interface:</span>
+            <span class="meta-val">20×4 Alphanumeric LCD (HD44780 on P0.0-P0.10)</span>
+        </div>
+        <div class="meta-row">
+            <span class="meta-label">Sensors & Actuators:</span>
+            <span class="meta-val">DS18B20 (P0.22), GP2D12 (P0.27), 8-LEDs (P0.0-P0.7)</span>
+        </div>
+    </div>
+</div>
+
+<!-- SECTION 1: SYSTEM OVERVIEW & ARCHITECTURE -->
+<h1>1. System Overview & Architecture</h1>
+<p>
+This project implements an intelligent distributed automotive Electronic Control Unit (ECU) network using three <strong>NXP LPC2129 ARM7</strong> microcontrollers communicating over an ISO 11898 compliant <strong>CAN 2.0B bus at 250 kbps</strong> with active node failure detection and automatic dashboard recovery.
+</p>
+
+<h2>1.1 Distributed ECU Nodes & Fault Supervision</h2>
+<ul>
+    <li><strong>Main Telemetry Node (Master Instrument Cluster)</strong>: Manages the 20×4 LCD digital instrument cluster, samples engine temperature from a DS18B20 1-Wire sensor, supervises CAN response timeouts, and displays dedicated error screens upon node disconnection.</li>
+    <li><strong>Window Glass Control Node (Body Control ECU)</strong>: Features 8 physical LED levels (P0.0-P0.7) supporting single-tap step increments, continuous press holding, and physical boundary protections.</li>
+    <li><strong>Reverse Alert Node (ADAS / Parking Proximity ECU)</strong>: Employs a 20-sample trimmed mean filter, digital low-pass filtering, and deadband hysteresis on the Sharp GP2D12 IR sensor (AD0.0 / P0.27).</li>
+</ul>
+
+<h2>1.2 System Architecture Block Diagram</h2>
+<div class="diagram-box">
+    <svg width="100%" height="220" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="100" width="640" height="12" rx="6" fill="#0284c7"/>
+        <text x="350" y="109" fill="#ffffff" font-size="9" font-family="sans-serif" font-weight="bold" text-anchor="middle">DIFFERENTIAL CAN BUS (CANH / CANL @ 250 kbps) — 120Ω TERMINATION</text>
+        
+        <!-- Node 1: Main Node -->
+        <rect x="40" y="10" width="180" height="70" rx="8" fill="#f8fafc" stroke="#0284c7" stroke-width="2"/>
+        <text x="130" y="30" fill="#1e293b" font-size="12" font-weight="bold" text-anchor="middle">MAIN NODE (ECU 1)</text>
+        <text x="130" y="46" fill="#64748b" font-size="9.5" text-anchor="middle">LPC2129 ARM7</text>
+        <text x="130" y="60" fill="#0369a1" font-size="9" text-anchor="middle">20x4 LCD | DS18B20 | Watchdog</text>
+        <line x1="130" y1="80" x2="130" y2="100" stroke="#0284c7" stroke-width="3"/>
+        
+        <!-- Node 2: Window Node -->
+        <rect x="260" y="135" width="180" height="70" rx="8" fill="#f8fafc" stroke="#16a34a" stroke-width="2"/>
+        <text x="350" y="155" fill="#1e293b" font-size="12" font-weight="bold" text-anchor="middle">WINDOW NODE (ECU 2)</text>
+        <text x="350" y="171" fill="#64748b" font-size="9.5" text-anchor="middle">LPC2129 ARM7</text>
+        <text x="350" y="185" fill="#15803d" font-size="9" text-anchor="middle">8-Level Position LEDs (P0.0 - P0.7)</text>
+        <line x1="350" y1="112" x2="350" y2="135" stroke="#16a34a" stroke-width="3"/>
+
+        <!-- Node 3: Reverse Node -->
+        <rect x="480" y="10" width="180" height="70" rx="8" fill="#f8fafc" stroke="#d97706" stroke-width="2"/>
+        <text x="570" y="30" fill="#1e293b" font-size="12" font-weight="bold" text-anchor="middle">REVERSE NODE (ECU 3)</text>
+        <text x="570" y="46" fill="#64748b" font-size="9.5" text-anchor="middle">LPC2129 ARM7</text>
+        <text x="570" y="60" fill="#b45309" font-size="9" text-anchor="middle">GP2D12 (AD0.0 / P0.27) 20-Sample Filter</text>
+        <line x1="570" y1="80" x2="570" y2="100" stroke="#d97706" stroke-width="3"/>
+    </svg>
+</div>
+
+<!-- SECTION 2: CAN COMMUNICATION PROTOCOL -->
+<h1>2. CAN Communication Protocol Matrix</h1>
+<table>
+    <thead>
+        <tr>
+            <th>CAN Identifier</th>
+            <th>Frame Type</th>
+            <th>DLC</th>
+            <th>Source ECU</th>
+            <th>Destination</th>
+            <th>Payload Definition</th>
+            <th>Timeout & Error Handling</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>0x101</strong></td>
+            <td>Data Frame</td>
+            <td>1 Byte</td>
+            <td>Main Node</td>
+            <td>Window Node</td>
+            <td><code>0x01</code>=UP / <code>0x02</code>=DOWN</td>
+            <td>500ms response timeout</td>
+        </tr>
+        <tr>
+            <td><strong>0x102</strong></td>
+            <td>Data Frame</td>
+            <td>1 Byte</td>
+            <td>Main Node</td>
+            <td>Reverse Node</td>
+            <td><code>0x01</code>=ENABLE / <code>0x00</code>=DISABLE</td>
+            <td>Activates/Deactivates reverse proximity sensing</td>
+        </tr>
+        <tr>
+            <td><strong>0x103</strong></td>
+            <td>Data Frame</td>
+            <td>2 Bytes</td>
+            <td>Reverse Node</td>
+            <td>Main Node</td>
+            <td>Byte 0: Filtered Distance (cm)<br>Byte 1: Zone ID (1..4)</td>
+            <td>800ms watchdog with automatic recovery</td>
+        </tr>
+        <tr>
+            <td><strong>0x201</strong></td>
+            <td>Data Frame</td>
+            <td>2 Bytes</td>
+            <td>Window Node</td>
+            <td>Main Node</td>
+            <td>Byte 0: Level (0..8)<br>Byte 1: Percentage (0..100%)</td>
+            <td>Acknowledges exact window level position</td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- SECTION 3: 20x4 LCD SCREENS GALLERY & ERROR STATES -->
+<h1>3. 20×4 LCD Visual Screens Gallery & Error Displays</h1>
+
+<div class="lcd-grid">
+    <!-- Boot Screen -->
+    <div class="lcd-card">
+        <div class="lcd-header">🚀 1. SYSTEM BOOT / INITIALIZATION SCREEN</div>
+        <div class="lcd-screen">====================
+  SMART VEHICLE ECU 
+ ENGINE & SAFETY OS 
+====================</div>
+    </div>
+
+    <!-- Normal Dashboard -->
+    <div class="lcd-card">
+        <div class="lcd-header">🌡️ 2. DASHBOARD - NORMAL & ALL ECUS OK</div>
+        <div class="lcd-screen">--- VEHICLE DASH ---
+TEMP  : 32.5°C [ OK ]
+STATUS: ALL ECUS OK 
+WIN: 50%    REV: OFF</div>
+    </div>
+
+    <!-- Dashboard with ECU Offline Warning -->
+    <div class="lcd-card warn">
+        <div class="lcd-header">⚠️ 3. DASHBOARD - ECU OFFLINE DETECTED</div>
+        <div class="lcd-screen">--- VEHICLE DASH ---
+TEMP  : 32.5°C [ OK ]
+! WARN: ECU OFFLINE 
+WIN: 50%    REV: OFF</div>
+    </div>
+
+    <!-- Temperature Sensor Disconnected -->
+    <div class="lcd-card alert">
+        <div class="lcd-header">🌡️ 4. DASHBOARD - TEMP SENSOR FAULT</div>
+        <div class="lcd-screen red">--- VEHICLE DASH ---
+TEMP  : SENSOR ERR  
+STATUS: CHECK 1-WIRE
+WIN: 50%    REV: OFF</div>
+    </div>
+
+    <!-- Window Node Disconnection Error -->
+    <div class="lcd-card alert">
+        <div class="lcd-header">🪟 5. WINDOW MODULE DISCONNECTED</div>
+        <div class="lcd-screen red">! CAN BUS WARNING ! 
+NODE: WINDOW MODULE 
+ERROR: NO RESPONSE  
+STATUS: OFFLINE /ERR</div>
+    </div>
+
+    <!-- Reverse Node Disconnection Error -->
+    <div class="lcd-card alert">
+        <div class="lcd-header">🚧 6. REVERSE RADAR DISCONNECTED</div>
+        <div class="lcd-screen red">! CAN BUS WARNING ! 
+NODE: REVERSE RADAR 
+ERROR: NO RESPONSE  
+STATUS: OFFLINE /ERR</div>
+    </div>
+
+    <!-- Window Level 4 -->
+    <div class="lcd-card">
+        <div class="lcd-header">🪟 7. POWER WINDOW - LEVEL 4 (50% GLASS)</div>
+        <div class="lcd-screen">=== POWER WINDOW ===
+MOTION: ROLLING UP ▲
+GLASS: [||||....]50%
+STATUS: LEVEL 4 OF 8</div>
+    </div>
+
+    <!-- Reverse Safe Zone -->
+    <div class="lcd-card">
+        <div class="lcd-header">🟢 8. REVERSE RADAR - SAFE ZONE (&ge;80 cm)</div>
+        <div class="lcd-screen green">&lt;&lt;  REVERSE RADAR &gt;&gt;
+DIST  : 110 cm[SAFE]
+ZONE  : GREEN / OK  
+BAR   :[||||||||||||]</div>
+    </div>
+</div>
+
+<div class="page-break"></div>
+
+<!-- SECTION 4: HARDWARE PINOUT & WIRING -->
+<h1>4. Complete Hardware Pin Connections (Exact Hardware Mapping)</h1>
+
+<h2>4.1 Main Node (Master ECU) Pin Mapping</h2>
+<table>
+    <thead>
+        <tr>
+            <th>LPC2129 Port / Pin</th>
+            <th>Connected Peripheral</th>
+            <th>Peripheral Pin / Function</th>
+            <th>Description & Circuit Requirements</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong><code>P0.0 – P0.7</code></strong></td>
+            <td>20×4 LCD Display</td>
+            <td><strong>D0 – D7</strong></td>
+            <td>8-Bit Parallel Data Bus (Data mask: <code>0xFF</code>)</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.8</code></strong></td>
+            <td>20×4 LCD Display</td>
+            <td><strong>EN</strong> (Enable)</td>
+            <td>Active High Strobe Pulse</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.9</code></strong></td>
+            <td>20×4 LCD Display</td>
+            <td><strong>RS</strong> (Register Select)</td>
+            <td><code>0</code> = Command Mode, <code>1</code> = Data Mode</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.10</code></strong></td>
+            <td>20×4 LCD Display</td>
+            <td><strong>RW</strong> (Read / Write)</td>
+            <td><code>0</code> = Write Operation (Tied to GND / Low)</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.22</code></strong></td>
+            <td><strong>DS18B20 Temp Sensor</strong></td>
+            <td><strong>DQ</strong> (Data Line)</td>
+            <td>1-Wire Data Line with 4.7kΩ Pull-Up to +5V</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.16</code> (EINT0)</strong></td>
+            <td>Window UP Pushbutton</td>
+            <td>Terminal 1</td>
+            <td>Active LOW (Single tap increment / Continuous hold)</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.14</code> (EINT1)</strong></td>
+            <td>Window DOWN Pushbutton</td>
+            <td>Terminal 1</td>
+            <td>Active LOW (Single tap decrement / Continuous hold)</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.15</code> (EINT2)</strong></td>
+            <td>Reverse Gear Switch</td>
+            <td>Terminal 1</td>
+            <td>Active LOW Reverse Engage Switch</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.24 (TD1)</code></strong></td>
+            <td>CAN Transceiver (MCP2551)</td>
+            <td><strong>TXD</strong> (Pin 1)</td>
+            <td>CAN Controller 1 Transmit Line</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.25 (RD1)</code></strong></td>
+            <td>CAN Transceiver (MCP2551)</td>
+            <td><strong>RXD</strong> (Pin 4)</td>
+            <td>CAN Controller 1 Receive Line</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4.2 Window Glass Control Node Pin Mapping</h2>
+<table>
+    <thead>
+        <tr>
+            <th>LPC2129 Port / Pin</th>
+            <th>Connected Peripheral</th>
+            <th>Peripheral Function</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong><code>P0.0 – P0.7</code></strong></td>
+            <td>Window Position Actuator / LED Bar</td>
+            <td><strong>Position Indicators (LED 0..7)</strong></td>
+            <td>8-Level discrete position indicator bar (Active LOW)</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.24 / P0.25</code></strong></td>
+            <td>CAN Transceiver (MCP2551)</td>
+            <td><strong>TD1 / RD1</strong></td>
+            <td>CAN Bus Interface (250 kbps)</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>4.3 Reverse Alert Node Pin Mapping</h2>
+<table>
+    <thead>
+        <tr>
+            <th>LPC2129 Port / Pin</th>
+            <th>Connected Peripheral</th>
+            <th>Peripheral Function</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong><code>P0.27 (AD0.0 / AIN0)</code></strong></td>
+            <td>Sharp GP2D12 IR Sensor</td>
+            <td><strong>Vo (Analog Out)</strong></td>
+            <td>10-bit ADC with 20-sample trimmed mean filter & hysteresis</td>
+        </tr>
+        <tr>
+            <td><strong><code>P0.24 / P0.25</code></strong></td>
+            <td>CAN Transceiver (MCP2551)</td>
+            <td><strong>TD1 / RD1</strong></td>
+            <td>CAN Bus Interface (250 kbps)</td>
+        </tr>
+    </tbody>
+</table>
+
+<!-- SECTION 5: BUILD AND VERIFICATION -->
+<h1>5. Build & Proteus Simulation Instructions</h1>
+<ol>
+    <li><strong>Keil uVision</strong>: Open each node project, verify target device is <strong>NXP LPC2129</strong>, compile with crystal frequency at 12.0 MHz, and generate <code>.hex</code> files.</li>
+    <li><strong>Proteus Simulation</strong>:
+        <ul>
+            <li>Place three <strong>LPC2129</strong> microcontrollers and three <strong>MCP2551</strong> transceivers.</li>
+            <li>Connect differential pair <code>CANH</code> and <code>CANL</code> across all three nodes with two <strong>120Ω termination resistors</strong>.</li>
+            <li>Wire the <strong>20×4 LCD to P0.0–P0.10</strong>, <strong>DS18B20 to P0.22</strong>, <strong>LED bar to P0.0–P0.7</strong>, and <strong>GP2D12 to P0.27</strong>.</li>
+            <li>Load the compiled <code>.hex</code> files and test disconnecting any CAN line to verify live node disconnection error alerts.</li>
+        </ul>
+    </li>
+</ol>
+
+</body>
+</html>
