@@ -447,4 +447,4 @@ CAN-Based-Engine-Monitoring-and-Vehicle-Control-System/
 **Deekshith Tupakula**  
 *Embedded Systems Engineer*
 
-Specialized in: **Embedded C | ARM7 (LPC2129) | CAN Bus 2.0B | Automotive ECUs | Keil µVision | Sensor Interfacing**
+Specialized in: **Embedded C | ARM7 (LPC2129) | CAN | Automotive ECUs | Keil µVision | Sensor Interfacing**
