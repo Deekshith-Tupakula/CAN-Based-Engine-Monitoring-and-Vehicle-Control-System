@@ -91,7 +91,7 @@ If any node is disconnected (CANH/CANL bus severed or ECU power lost), the syste
 ### Error Detection Workflow ⚠️
 
 <p align="center">
-  <img src="Documentation/Images/Error Detection.png" alt="Error Detection Workflow" width="900">
+  <img src="Documentation/Images/error_detection.png" alt="Error Detection Workflow" width="850">
 </p>
 
 ---
