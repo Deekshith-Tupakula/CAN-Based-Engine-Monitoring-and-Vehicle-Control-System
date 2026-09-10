@@ -1,4 +1,4 @@
-﻿# 🚗 CAN-Based Engine Monitoring and Vehicle Control System
+# 🚗 CAN-Based Engine Monitoring and Vehicle Control System
 
 <p align="center">
   <img src="https://img.shields.io/badge/Platform-LPC2129%20(ARM7)-blue?style=for-the-badge&logo=arm" alt="Platform"/>
@@ -62,7 +62,7 @@ The system continuously monitors engine temperature, controls power window movem
 # 🖼 Block Diagram
 
 <p align="center">
-    <img src="Documentation/Images/Block Diagram.png" alt="Project Block Diagram" width="900">
+    <img src="Documentation/Images/block_diagram.png" alt="Project Block Diagram" width="900">
 </p>
 
 <br>
