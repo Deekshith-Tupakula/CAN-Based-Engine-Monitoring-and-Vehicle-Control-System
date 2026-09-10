@@ -197,8 +197,6 @@ CAN-Based-Engine-Monitoring-and-Vehicle-Control-System/
 │   ├── PINOUT_AND_WIRING.md           # Pinout maps and hardware interconnects
 │   ├── SYSTEM_DOCUMENTATION.md        # Comprehensive Engineering Report
 │   └── CAN_Engine_Monitoring_and_Vehicle_Control_System_Comprehensive_Documentation.pdf
-│
-├── pdf_assets/                        # High-resolution architectural figures
 ├── .gitignore                         # Keil intermediate build exclusions
 └── README.md                          # Main project documentation
 ```
