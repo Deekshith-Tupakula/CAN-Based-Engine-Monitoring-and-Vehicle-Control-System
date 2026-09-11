@@ -445,6 +445,4 @@ CAN-Based-Engine-Monitoring-and-Vehicle-Control-System/
 # 👨‍💻 Author
 
 **Deekshith Tupakula**  
-*Embedded Systems Engineer*
-
 Specialized in: **Embedded C | ARM7 (LPC2129) | CAN | Automotive ECUs | Keil µVision | Sensor Interfacing**
